@@ -1,0 +1,61 @@
+def arithmetic_arranger(problems, show_answers=False):
+    counter = 0
+    temp_problems =''
+    for i in range(len(problems)): #prints length of errors
+        counter += 1
+    if counter > 5:
+            return('Error: Too many problems')
+    else:
+        for question in problems:
+            temp_problems += question + ' '
+
+            if '*' in temp_problems or '/' in temp_problems:
+                return ("Error: Operator must be '+' or '-'")
+            #checks to see if there are any other operands other than '+' or '-'
+            if not all(i.isdigit() or i in "+- " for i in temp_problems):
+                return ('Error: Numbers must only contain digits.')
+            
+            #creates an array by replacing the space for list items         
+            all_array= temp_problems.split()
+            #creates an array filled with just the numbers
+            num_array= [num for num in all_array if num.isdigit()]
+            if any(len(num)>4 for num in num_array):
+                return ('Error: Numbers cannot be more than four digits')
+
+            #starting the alogrithm for real this time
+            #start with using all_array
+
+            #four spaces in between each question
+            #digits have to line up with each other per question
+            #since no number can be greater than 4, max space alotted to each question is 6
+            #the number of dashed lines is equal to the bottom row
+
+
+            #create variable with empty strings for each different rows
+            first_row=''
+            second_row=''
+            dashes_row=''
+            ans_row = ''
+            final_print = ''
+            ans=0
+            first_row_array = all_array[::3]
+            sign_row_array = all_array[1::3]
+            third_row_array = all_array[2::3]
+            #check which row of numbers is longer, and add it to a list
+            longest_length = []
+            for i in range (len(first_row_array)):
+                if len(first_row_array[i]) > len(third_row_array[i]):
+                    longest_length.append(len(first_row_array[i])+2)
+                else:
+                    longest_length.append(len(third_row_array[i])+2)
+            for i in range (len(first_row_array)):
+                first_row = first_row + ' '*(longest_length[i]-len(first_row_array[i])) + first_row_array[i] + ' '*4
+                second_row = second_row + sign_row_array[i] + ' '*(longest_length[i]-len(sign_row_array[i])-len(third_row_array[i]))  + third_row_array[i] +' '*4
+                dashes_row= dashes_row + '-'*longest_length[i] + ' '*4
+                #ans= eval(problems[0])
+                ans_row = ans_row + ' '*(longest_length[i]-len(str(eval(problems[i])))) + str(eval(problems[i])) + ' '*4
+            if show_answers == False:
+                final_print = first_row + '\n' + second_row + '\n' + dashes_row 
+            else:  
+                final_print = first_row + '\n' + second_row + '\n' + dashes_row + '\n' + ans_row
+        return final_print
